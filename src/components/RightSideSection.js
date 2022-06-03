@@ -26,44 +26,29 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 
 const RightSideSection = ({ prop }) => {
   // ========================start==============================
-  const [propsValue, setPropsValue] = useState(null);
-  const [arr, setArr] = useState([]);
-
+  const [propsValue, setPropsValue] = useState({});
   const handleValue = (event, newPropsValue) => {
     setPropsValue(newPropsValue);
   };
-  // console.log("propsValue:::", propsValue);
-  // console.log("prop.name:::", prop.name);
-  // console.log({});
 
   const variation = useSelector((state) => state.product.variation);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    propsValue &&
-      //   // variation.find((check) => check.id !== propsValue.id) &&
-      dispatch(selectedVariation(...arr));
-    // if (propsValue) {
-    //   if (variation.length === 0) {
-    //     console.log("ok from if");
-    //     dispatch(selectedVariation(propsValue));
-    //   } else if (variation.length !== 0 && !prop.value.includes(propsValue)) {
-    //     dispatch(selectedVariation(propsValue));
-    //     console.log("OK from else if");
-    //   } else {
-    //     console.log("not ok");
-    //   }
-    // }
-  }, [arr, dispatch]);
+    if (propsValue && Object.keys(propsValue).length !== 0) {
+      dispatch(selectedVariation(propsValue));
+    }
+    if (propsValue === null) {
+      console.log("propsValue === null eita true");
+      dispatch(
+        selectedVariation(JSON.stringify({ name: prop.name, value: {} }))
+      );
+    }
+  }, [dispatch, prop.name, propsValue]);
 
-  // console.log("propsValue:::", propsValue);
+  console.log("propsValue:::", propsValue);
   console.log("variation:::", variation);
 
-  if (propsValue && !arr.includes(propsValue)) {
-    setArr([...arr, propsValue]);
-  }
-  // console.log(propsValue);
-  // console.log(arr);
   // ==========================end============================
 
   return (
@@ -81,8 +66,8 @@ const RightSideSection = ({ prop }) => {
           value.thumb ? (
             <ToggleButton
               key={value.id}
-              value={value}
-              // value={{ value: value, name: prop.name }}
+              // value={value}
+              value={JSON.stringify({ value: value, name: prop.name })}
               sx={{ display: "flex", flexDirection: "column" }}
             >
               <img src={value.thumb} alt="" />
@@ -91,8 +76,8 @@ const RightSideSection = ({ prop }) => {
           ) : (
             <ToggleButton
               key={value.id}
-              value={value}
-              // value={{ value: value, name: prop.name }}
+              // value={value}
+              value={JSON.stringify({ value: value, name: prop.name })}
             >
               <Typography>{value.name}</Typography>
             </ToggleButton>
