@@ -7,6 +7,7 @@ import {
   Breadcrumbs,
   ImageList,
   ImageListItem,
+  Paper,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,7 +46,7 @@ const ProductDetails = () => {
     dispatch(fetchProduct());
   }, [dispatch]);
 
-  console.log("product:::", product);
+  // console.log("product:::", product);
 
   return (
     <Box>
@@ -75,7 +76,16 @@ const ProductDetails = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           {Object.keys(product).length !== 0 && (
-            <RightSideSection product={product} />
+            <Box>
+              <Typography>{product?.title}</Typography>
+              <Paper elevation={3} sx={{ mt: 2, py: 3 }}>
+                <Typography>Price: 100</Typography>
+              </Paper>
+
+              {product.variation.props.map((prop) => (
+                <RightSideSection prop={prop} />
+              ))}
+            </Box>
           )}
         </Grid>
       </Grid>

@@ -15,10 +15,14 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     product: {},
+    variation: [],
   },
   reducers: {
-    showProduct: (state, { payload }) => {
-      state.product.push(payload);
+    // showProduct: (state, { payload }) => {
+    //   state.product.push(payload);
+    // },
+    selectedVariation: (state, { payload }) => {
+      state.variation.push(payload);
     },
   },
   extraReducers: (builder) => {
@@ -28,6 +32,9 @@ const productSlice = createSlice({
   },
 });
 
-export const { showProduct } = productSlice.actions;
+export const {
+  // showProduct,
+  selectedVariation,
+} = productSlice.actions;
 
 export default productSlice.reducer;
