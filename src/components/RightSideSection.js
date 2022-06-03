@@ -7,7 +7,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 // =====================start=================================
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
-    margin: theme.spacing(0.5),
+    margin: theme.spacing(1),
     border: 0,
     "&.Mui-disabled": {
       border: 0,
@@ -56,8 +56,13 @@ const RightSideSection = ({ product }) => {
           >
             {prop.values.map((value) =>
               value.thumb ? (
-                <ToggleButton key={value.id} value={value}>
+                <ToggleButton
+                  key={value.id}
+                  value={value}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
                   <img src={value.thumb} alt="" />
+                  <Typography>{value.name}</Typography>
                 </ToggleButton>
               ) : (
                 <ToggleButton key={value.id} value={value}>
