@@ -1,21 +1,18 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProduct } from "../redux/slices/productSlice";
 
 const ProductDetails = () => {
-  const [productDetails, setProductDetails] = useState({});
+  const product = useSelector((state) => state.product.product);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios
-      .get(
-        "https://moveon-api-server.sbox.ali2bd.net/api/v1/customer/dummy-product"
-      )
-      .then((response) => setProductDetails(response.data))
-      .catch((error) => console.log(error));
-  }, []);
+    dispatch(fetchProduct());
+  }, [dispatch]);
 
-  console.log(productDetails);
+  console.log("product:::", product);
 
   return (
     <Box>
