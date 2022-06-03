@@ -7,11 +7,11 @@ import {
   Breadcrumbs,
   ImageList,
   ImageListItem,
-  Paper,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../redux/slices/productSlice";
+import RightSideSection from "./RightSideSection";
 
 const breadcrumbs = [
   <Link
@@ -63,7 +63,7 @@ const ProductDetails = () => {
 
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <Box sx={{ border: "1px solid red", height: "400px" }}>
+          <Box>
             <ImageList cols={2}>
               {product?.gallery?.map((item) => (
                 <ImageListItem key={item?.url}>
@@ -74,18 +74,9 @@ const ProductDetails = () => {
           </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Box sx={{ border: "1px solid red", height: "400px" }}>
-            <Typography>{product?.title}</Typography>
-            <Paper elevation={3} sx={{ mt: 2, py: 3 }}>
-              <Typography>Price: 100</Typography>
-            </Paper>
-            <Paper elevation={3} sx={{ mt: 2, py: 3 }}>
-              <Typography>Color: Black</Typography>
-            </Paper>
-            <Paper elevation={3} sx={{ mt: 2, py: 3 }}>
-              <Typography>Size: 44</Typography>
-            </Paper>
-          </Box>
+          {Object.keys(product).length !== 0 && (
+            <RightSideSection product={product} />
+          )}
         </Grid>
       </Grid>
     </Box>
