@@ -40,6 +40,7 @@ const productSlice = createSlice({
           state.cart[payload] = 1;
         }
       }
+      // state.cart = { ...state.cart, payload };
     },
     removeFromCart: (state, { payload }) => {
       state.cart = Object.keys(state.cart)

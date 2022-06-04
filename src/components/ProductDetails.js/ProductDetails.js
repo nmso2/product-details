@@ -190,6 +190,7 @@ const ProductDetails = () => {
                     sx={{ mx: 1 }}
                     onClick={() => {
                       dispatch(addToCart(product.id));
+                      // dispatch(addToCart((cart[product.id] = counter)));
                     }}
                   >
                     Add To Cart
