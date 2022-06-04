@@ -9,10 +9,14 @@ import {
   ImageListItem,
   Paper,
   Container,
+  Rating,
+  Button,
+  ButtonGroup,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProduct } from "../../redux/slices/productSlice";
+import { addToCart, fetchProduct } from "../../redux/slices/productSlice";
 import VariationSection from "./VariationSection";
 
 const breadcrumbs = [
@@ -30,10 +34,12 @@ const breadcrumbs = [
 const ProductDetails = () => {
   const product = useSelector((state) => state.product.product);
   const variation = useSelector((state) => state.product.variation);
+  const cart = useSelector((state) => state.product.cart);
 
   const [skuProps, setSkuProps] = useState([]);
   const [selectedSku, setSelectedSku] = useState([]);
   const [variantImage, setVariantImage] = useState("");
+  const [counter, setCounter] = useState(1);
 
   const dispatch = useDispatch();
 
@@ -71,12 +77,6 @@ const ProductDetails = () => {
     setSelectedSku(data);
   }, [product, skuProps]);
 
-  // console.log("product:::", product);
-  // console.log("galleryImage:::", galleryImage);
-  // console.log("variation:::", variation);
-  // console.log("skuProps:::", skuProps);
-  console.log("selectedSku:::", selectedSku);
-
   return (
     <Container sx={{ mt: 4 }}>
       <Box sx={{ display: { sm: "flex" } }}>
@@ -110,25 +110,92 @@ const ProductDetails = () => {
         <Grid item xs={12} sm={6}>
           {Object.keys(product).length !== 0 && (
             <Box>
-              <Typography>{product?.title}</Typography>
-              <Paper elevation={3} sx={{ mt: 2, py: 3 }}>
-                <Typography>
-                  Price: Rs. {selectedSku?.price?.discounted}{" "}
-                  <del style={{ fontSize: "12px" }}>
-                    Rs. {selectedSku?.price?.old}
-                  </del>{" "}
-                  <span style={{ color: "red" }}>
-                    (
-                    {Math.round(
-                      100 -
-                        (100 * selectedSku?.price?.discounted) /
-                          selectedSku?.price?.old
-                    )}
-                    % OFF)
-                  </span>
+              <Paper elevation={3} sx={{ px: 3, py: 1 }}>
+                <Typography sx={{ fontSize: "18px", color: "salmon" }}>
+                  {product?.title}
                 </Typography>
-              </Paper>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Rating
+                    name="half-rating-read"
+                    defaultValue={product?.ratings_average}
+                    precision={0.1}
+                    readOnly
+                  />
+                  <PersonSharpIcon sx={{ ml: 2 }} />
+                  <Box>{product?.ratings_count}</Box>
+                </Box>
+                {selectedSku ? (
+                  <Typography sx={{ my: 1 }}>
+                    Price: Rs. {selectedSku?.price?.discounted}{" "}
+                    <del style={{ fontSize: "12px" }}>
+                      Rs. {selectedSku?.price?.old}
+                    </del>{" "}
+                    <span style={{ color: "red" }}>
+                      (
+                      {Math.round(
+                        100 -
+                          (100 * selectedSku?.price?.discounted) /
+                            selectedSku?.price?.old
+                      )}
+                      % OFF)
+                    </span>
+                  </Typography>
+                ) : (
+                  <Typography sx={{ my: 1 }}>
+                    Price: No Variation selected!
+                  </Typography>
+                )}
 
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    mb: 2,
+                  }}
+                >
+                  <ButtonGroup
+                    size="small"
+                    aria-label="small outlined button group"
+                    sx={{ mx: 1 }}
+                  >
+                    <Button
+                      onClick={() =>
+                        setCounter(counter - 1 < 0 ? 0 : counter - 1)
+                      }
+                      sx={{ fontSize: "16px" }}
+                    >
+                      -
+                    </Button>
+                    <Button disabled sx={{ fontSize: "16px" }}>
+                      {counter}
+                    </Button>
+                    <Button
+                      onClick={() => setCounter(counter + 1)}
+                      sx={{ fontSize: "16px" }}
+                    >
+                      +
+                    </Button>
+                  </ButtonGroup>
+                  <Button
+                    disabled={counter === 0 && true}
+                    color="warning"
+                    variant="contained"
+                    sx={{ mx: 1 }}
+                    onClick={() => {
+                      dispatch(addToCart(product.id));
+                    }}
+                  >
+                    Add To Cart
+                  </Button>
+                </Box>
+              </Paper>
               {product.variation.props.map((prop) => (
                 <VariationSection key={prop.id} prop={prop} />
               ))}

@@ -6,7 +6,6 @@ import ToggleButton from "@mui/material/ToggleButton";
 import { useDispatch } from "react-redux";
 import { selectedVariation } from "../../redux/slices/productSlice";
 
-// =====================start=================================
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
     margin: theme.spacing(1),
@@ -22,15 +21,15 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     },
   },
 }));
-// ===========================end===========================
 
 const VariationSection = ({ prop }) => {
-  // ========================start==============================
   const [propsValue, setPropsValue] = useState({});
   const [propsName, setPropsName] = useState("");
   const handleValue = (event, newPropsValue) => {
     setPropsValue(newPropsValue);
-    setPropsName(JSON.parse(newPropsValue).value.name);
+    newPropsValue
+      ? setPropsName(JSON.parse(newPropsValue).value.name)
+      : setPropsName("");
   };
 
   const dispatch = useDispatch();
@@ -45,8 +44,6 @@ const VariationSection = ({ prop }) => {
     }
   }, [dispatch, prop.name, propsValue]);
 
-  // ==========================end============================
-
   return (
     <Paper key={prop.id} elevation={3} sx={{ mt: 2, py: 3, textAlign: "left" }}>
       <Typography sx={{ px: 1 }}>
@@ -57,14 +54,12 @@ const VariationSection = ({ prop }) => {
         value={propsValue}
         exclusive
         onChange={handleValue}
-        // onChange={(e, value) => setPropsValue(value)}
         aria-label="text propsValue"
       >
         {prop.values.map((value) => {
           return value.thumb ? (
             <ToggleButton
               key={value.id}
-              // value={value}
               value={JSON.stringify({ value: value, name: prop.name })}
               sx={{ display: "flex", flexDirection: "column" }}
             >
@@ -74,7 +69,6 @@ const VariationSection = ({ prop }) => {
           ) : (
             <ToggleButton
               key={value.id}
-              // value={value}
               value={JSON.stringify({ value: value, name: prop.name })}
             >
               <Typography>{value.name}</Typography>
