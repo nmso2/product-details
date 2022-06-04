@@ -34,7 +34,6 @@ const breadcrumbs = [
 const ProductDetails = () => {
   const product = useSelector((state) => state.product.product);
   const variation = useSelector((state) => state.product.variation);
-  const cart = useSelector((state) => state.product.cart);
 
   const [skuProps, setSkuProps] = useState([]);
   const [selectedSku, setSelectedSku] = useState([]);
@@ -76,6 +75,20 @@ const ProductDetails = () => {
       });
     setSelectedSku(data);
   }, [product, skuProps]);
+
+  const addToCartHandler = () => {
+    if (skuProps.length !== 2) {
+      alert("You Must Select Color And Size!");
+    } else {
+      dispatch(
+        addToCart({
+          id: product.id,
+          sku: skuProps,
+          quantity: counter,
+        })
+      );
+    }
+  };
 
   return (
     <Container sx={{ mt: 4 }}>
@@ -188,10 +201,7 @@ const ProductDetails = () => {
                     color="warning"
                     variant="contained"
                     sx={{ mx: 1 }}
-                    onClick={() => {
-                      dispatch(addToCart(product.id));
-                      // dispatch(addToCart((cart[product.id] = counter)));
-                    }}
+                    onClick={addToCartHandler}
                   >
                     Add To Cart
                   </Button>

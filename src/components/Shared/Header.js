@@ -14,11 +14,13 @@ import { deepPurple } from "@mui/material/colors";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Badge, Link } from "@mui/material";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Header = () => {
-  const [cart, setCart] = useState({});
+  const product = useSelector((state) => state.product.product);
+  const cart = useSelector((state) => state.product.cart);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -157,13 +159,13 @@ const Header = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Added Products">
               <Badge badgeContent={Object.keys(cart).length} color="secondary">
-                <IconButton sx={{ p: 0 }}>
+                <IconButton sx={{ p: 0 }} onClick={handleOpenUserMenu}>
                   <ShoppingCartOutlinedIcon />
                 </IconButton>
               </Badge>
             </Tooltip>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ ml: { md: 2 } }}>
+              <IconButton sx={{ ml: { md: 2 } }}>
                 <Avatar
                   sx={{ bgcolor: deepPurple[100] }}
                   alt="Remy Sharp"
@@ -187,11 +189,7 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <img width={140} src={product.image} alt="" />
             </Menu>
           </Box>
         </Toolbar>

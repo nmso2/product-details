@@ -17,6 +17,7 @@ const productSlice = createSlice({
     product: {},
     variation: [],
     cart: {},
+    // cart: [],
   },
   reducers: {
     selectedVariation: (state, { payload }) => {
@@ -30,14 +31,13 @@ const productSlice = createSlice({
     addToCart: (state, { payload }) => {
       console.log("payload:::", payload);
       if (Object.keys(state.cart).length === 0) {
-        console.log("payload in if:::", payload);
-        state.cart[payload] = 1;
+        state.cart[payload.id] = payload;
       } else {
-        if (state.cart[payload]) {
-          const newCount = state.cart[payload] + 1;
-          state.cart[payload] = newCount;
+        if (state.cart[payload.id]) {
+          state.cart[payload.id].quantity = payload.quantity;
+          state.cart[payload.id].sku = payload.sku;
         } else {
-          state.cart[payload] = 1;
+          // state.cart[payload.id] = 1;
         }
       }
       // state.cart = { ...state.cart, payload };
