@@ -8,50 +8,38 @@ import {
   ImageList,
   ImageListItem,
   Paper,
+  Container,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProduct } from "../redux/slices/productSlice";
-import RightSideSection from "./RightSideSection";
+import { fetchProduct } from "../../redux/slices/productSlice";
+import VariationSection from "./VariationSection";
 
 const breadcrumbs = [
-  <Link
-    underline="hover"
-    key="1"
-    color="inherit"
-    href="/"
-    onClick={console.info("You clicked a breadcrumb.")}
-  >
-    MUI
+  <Link underline="hover" key="1" color="inherit" href="/">
+    Home
   </Link>,
-  <Link
-    underline="hover"
-    key="2"
-    color="inherit"
-    href="/material-ui/getting-started/installation/"
-    onClick={console.info("You clicked a breadcrumb.")}
-  >
-    Core
+  <Link underline="hover" key="2" color="inherit" href="/">
+    Product
   </Link>,
   <Typography key="3" color="text.primary">
-    Breadcrumb
+    Producut Details
   </Typography>,
 ];
 
 const ProductDetails = () => {
   const product = useSelector((state) => state.product.product);
+  const variation = useSelector((state) => state.product.variation);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProduct());
   }, [dispatch]);
 
-  // console.log("product:::", product);
+  console.log("variation:::", variation);
 
   return (
-    <Box>
-      <Typography>This is product details component!</Typography>
-
+    <Container sx={{ mt: 4 }}>
       <Box sx={{ display: { sm: "flex" } }}>
         <Typography sx={{ mr: 5 }}>Related Category</Typography>
         <Breadcrumbs
@@ -62,7 +50,7 @@ const ProductDetails = () => {
         </Breadcrumbs>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ mt: 1 }}>
         <Grid item xs={12} sm={6}>
           <Box>
             <ImageList cols={2}>
@@ -83,13 +71,13 @@ const ProductDetails = () => {
               </Paper>
 
               {product.variation.props.map((prop) => (
-                <RightSideSection prop={prop} />
+                <VariationSection prop={prop} />
               ))}
             </Box>
           )}
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 };
 

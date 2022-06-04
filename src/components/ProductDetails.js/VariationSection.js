@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Box, Paper, ToggleButtonGroup } from "@mui/material";
+import { Typography, Paper, ToggleButtonGroup } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
 import ToggleButton from "@mui/material/ToggleButton";
-import { useDispatch, useSelector } from "react-redux";
-import { selectedVariation } from "../redux/slices/productSlice";
+import { useDispatch } from "react-redux";
+import { selectedVariation } from "../../redux/slices/productSlice";
 
 // =====================start=================================
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
@@ -24,30 +24,23 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 // ===========================end===========================
 
-const RightSideSection = ({ prop }) => {
+const VariationSection = ({ prop }) => {
   // ========================start==============================
   const [propsValue, setPropsValue] = useState({});
   const handleValue = (event, newPropsValue) => {
     setPropsValue(newPropsValue);
   };
-
-  const variation = useSelector((state) => state.product.variation);
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (propsValue && Object.keys(propsValue).length !== 0) {
       dispatch(selectedVariation(propsValue));
     }
     if (propsValue === null) {
-      console.log("propsValue === null eita true");
       dispatch(
         selectedVariation(JSON.stringify({ name: prop.name, value: {} }))
       );
     }
   }, [dispatch, prop.name, propsValue]);
-
-  console.log("propsValue:::", propsValue);
-  console.log("variation:::", variation);
 
   // ==========================end============================
 
@@ -88,4 +81,4 @@ const RightSideSection = ({ prop }) => {
   );
 };
 
-export default RightSideSection;
+export default VariationSection;
