@@ -31,7 +31,8 @@ const ProductDetails = () => {
   const product = useSelector((state) => state.product.product);
   const variation = useSelector((state) => state.product.variation);
 
-  const [sku, setSku] = useState([]);
+  const [skuProps, setSkuProps] = useState([]);
+  const [selectedSku, setSelectedSku] = useState([]);
   const [variantImage, setVariantImage] = useState("");
 
   const dispatch = useDispatch();
@@ -46,17 +47,35 @@ const ProductDetails = () => {
         JSON.parse(v).value.image && setVariantImage(JSON.parse(v).value.image)
     );
     variation.map((v) => arr.push(JSON.parse(v).value.id));
-    setSku(arr);
+    setSkuProps(arr);
   }, [variation]);
 
   useEffect(() => {
     dispatch(fetchProduct());
   }, [dispatch]);
 
+  useEffect(() => {
+    const data =
+      product &&
+      product?.variation?.skus?.find((sku) => {
+        const ssku = [...sku.props].sort((a, b) => a - b);
+        skuProps.sort((a, b) => a - b);
+
+        return (
+          Array.isArray(ssku) &&
+          Array.isArray(skuProps) &&
+          ssku.length === skuProps.length &&
+          ssku.every((val, index) => val === skuProps[index])
+        );
+      });
+    setSelectedSku(data);
+  }, [product, skuProps]);
+
   // console.log("product:::", product);
   // console.log("galleryImage:::", galleryImage);
   // console.log("variation:::", variation);
-  console.log("sku:::", sku);
+  // console.log("skuProps:::", skuProps);
+  console.log("selectedSku:::", selectedSku);
 
   return (
     <Container sx={{ mt: 4 }}>
@@ -93,7 +112,21 @@ const ProductDetails = () => {
             <Box>
               <Typography>{product?.title}</Typography>
               <Paper elevation={3} sx={{ mt: 2, py: 3 }}>
-                <Typography>Price: 100</Typography>
+                <Typography>
+                  Price: Rs. {selectedSku?.price?.discounted}{" "}
+                  <del style={{ fontSize: "12px" }}>
+                    Rs. {selectedSku?.price?.old}
+                  </del>{" "}
+                  <span style={{ color: "red" }}>
+                    (
+                    {Math.round(
+                      100 -
+                        (100 * selectedSku?.price?.discounted) /
+                          selectedSku?.price?.old
+                    )}
+                    % OFF)
+                  </span>
+                </Typography>
               </Paper>
 
               {product.variation.props.map((prop) => (
@@ -108,15 +141,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
-
-// function arrayEquals(a, b) {
-//   a.sort((a, b) => a - b);
-//   b.sort((a, b) => a - b);
-
-//   return (
-//     Array.isArray(a) &&
-//     Array.isArray(b) &&
-//     a.length === b.length &&
-//     a.every((val, index) => val === b[index])
-//   );
-// }

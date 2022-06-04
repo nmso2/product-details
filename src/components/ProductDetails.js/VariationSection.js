@@ -27,9 +27,12 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 const VariationSection = ({ prop }) => {
   // ========================start==============================
   const [propsValue, setPropsValue] = useState({});
+  const [propsName, setPropsName] = useState("");
   const handleValue = (event, newPropsValue) => {
     setPropsValue(newPropsValue);
+    setPropsName(JSON.parse(newPropsValue).value.name);
   };
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (propsValue && Object.keys(propsValue).length !== 0) {
@@ -46,7 +49,9 @@ const VariationSection = ({ prop }) => {
 
   return (
     <Paper key={prop.id} elevation={3} sx={{ mt: 2, py: 3, textAlign: "left" }}>
-      <Typography sx={{ px: 1 }}>{prop.name}: </Typography>
+      <Typography sx={{ px: 1 }}>
+        {prop.name}: {propsName}
+      </Typography>
       <StyledToggleButtonGroup
         size="small"
         value={propsValue}
@@ -55,8 +60,8 @@ const VariationSection = ({ prop }) => {
         // onChange={(e, value) => setPropsValue(value)}
         aria-label="text propsValue"
       >
-        {prop.values.map((value) =>
-          value.thumb ? (
+        {prop.values.map((value) => {
+          return value.thumb ? (
             <ToggleButton
               key={value.id}
               // value={value}
@@ -74,8 +79,8 @@ const VariationSection = ({ prop }) => {
             >
               <Typography>{value.name}</Typography>
             </ToggleButton>
-          )
-        )}
+          );
+        })}
       </StyledToggleButtonGroup>
     </Paper>
   );
