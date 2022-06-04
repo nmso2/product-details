@@ -18,22 +18,13 @@ const productSlice = createSlice({
     variation: [],
   },
   reducers: {
-    // showProduct: (state, { payload }) => {
-    //   state.product.push(payload);
-    // },
     selectedVariation: (state, { payload }) => {
-      console.log("object", payload);
-      // if (JSON.parse(payload) === "") {
-      //   state.variation = [];
-      // } else {
       state.variation = state?.variation?.filter(
         (oldData) => JSON.parse(oldData)?.name !== JSON.parse(payload)?.name
       );
       if (Object.keys(JSON.parse(payload).value).length !== 0) {
         state.variation.push(payload);
       }
-      // }
-      // state.variation.push(payload);
     },
   },
   extraReducers: (builder) => {

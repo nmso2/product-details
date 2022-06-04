@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -30,13 +30,33 @@ const breadcrumbs = [
 const ProductDetails = () => {
   const product = useSelector((state) => state.product.product);
   const variation = useSelector((state) => state.product.variation);
+
+  const [sku, setSku] = useState([]);
+  const [variantImage, setVariantImage] = useState("");
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const arr = [];
+    if (variation.length === 0) {
+      setVariantImage("");
+    }
+    variation.map(
+      (v) =>
+        JSON.parse(v).value.image && setVariantImage(JSON.parse(v).value.image)
+    );
+    variation.map((v) => arr.push(JSON.parse(v).value.id));
+    setSku(arr);
+  }, [variation]);
 
   useEffect(() => {
     dispatch(fetchProduct());
   }, [dispatch]);
 
-  console.log("variation:::", variation);
+  // console.log("product:::", product);
+  // console.log("galleryImage:::", galleryImage);
+  // console.log("variation:::", variation);
+  console.log("sku:::", sku);
 
   return (
     <Container sx={{ mt: 4 }}>
@@ -54,11 +74,17 @@ const ProductDetails = () => {
         <Grid item xs={12} sm={6}>
           <Box>
             <ImageList cols={2}>
-              {product?.gallery?.map((item) => (
-                <ImageListItem key={item?.url}>
-                  <img src={item?.url} alt={item.title} loading="lazy" />
+              {variantImage ? (
+                <ImageListItem>
+                  <img src={variantImage} alt="" loading="lazy" />
                 </ImageListItem>
-              ))}
+              ) : (
+                product?.gallery?.map((item) => (
+                  <ImageListItem key={item?.url}>
+                    <img src={item?.url} alt={item.title} loading="lazy" />
+                  </ImageListItem>
+                ))
+              )}
             </ImageList>
           </Box>
         </Grid>
@@ -71,7 +97,7 @@ const ProductDetails = () => {
               </Paper>
 
               {product.variation.props.map((prop) => (
-                <VariationSection prop={prop} />
+                <VariationSection key={prop.id} prop={prop} />
               ))}
             </Box>
           )}
@@ -82,3 +108,15 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
+
+// function arrayEquals(a, b) {
+//   a.sort((a, b) => a - b);
+//   b.sort((a, b) => a - b);
+
+//   return (
+//     Array.isArray(a) &&
+//     Array.isArray(b) &&
+//     a.length === b.length &&
+//     a.every((val, index) => val === b[index])
+//   );
+// }
