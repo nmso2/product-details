@@ -12,7 +12,9 @@ import {
   Rating,
   Button,
   ButtonGroup,
+  Snackbar,
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +33,10 @@ const breadcrumbs = [
   </Typography>,
 ];
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const ProductDetails = () => {
   const product = useSelector((state) => state.product.product);
   const variation = useSelector((state) => state.product.variation);
@@ -39,6 +45,20 @@ const ProductDetails = () => {
   const [selectedSku, setSelectedSku] = useState([]);
   const [variantImage, setVariantImage] = useState("");
   const [counter, setCounter] = useState(1);
+
+  const [snackbar, setSnackbar] = useState({
+    message: "",
+    severity: "",
+  });
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   const dispatch = useDispatch();
 
@@ -90,11 +110,29 @@ const ProductDetails = () => {
           quantity: counter,
         })
       );
+      setSnackbar({
+        message: "Product Added to cart!",
+        severity: "success",
+      });
+      setSnackbarOpen(true);
     }
   };
 
   return (
     <Container sx={{ mt: 4 }}>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
       <Box sx={{ display: { sm: "flex" } }}>
         <Typography sx={{ mr: 5 }}>Related Category</Typography>
         <Breadcrumbs
