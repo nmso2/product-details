@@ -84,6 +84,9 @@ const ProductDetails = () => {
         addToCart({
           id: product.id,
           sku: skuProps,
+          discountPrice: selectedSku?.price?.discounted * counter,
+          oldPrice: selectedSku?.price?.old * counter,
+          img: variantImage,
           quantity: counter,
         })
       );
@@ -145,16 +148,16 @@ const ProductDetails = () => {
                 </Box>
                 {selectedSku ? (
                   <Typography sx={{ my: 1 }}>
-                    Price: Rs. {selectedSku?.price?.discounted}{" "}
+                    Price: Rs. {selectedSku?.price?.discounted * counter}{" "}
                     <del style={{ fontSize: "12px" }}>
-                      Rs. {selectedSku?.price?.old}
+                      Rs. {selectedSku?.price?.old * counter}
                     </del>{" "}
                     <span style={{ color: "red" }}>
                       (
                       {Math.round(
                         100 -
-                          (100 * selectedSku?.price?.discounted) /
-                            selectedSku?.price?.old
+                          (100 * selectedSku?.price?.discounted * counter) /
+                            (selectedSku?.price?.old * counter)
                       )}
                       % OFF)
                     </span>

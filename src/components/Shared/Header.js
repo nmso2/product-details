@@ -15,8 +15,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Badge, Link } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import CartItem from "../ProductDetails.js/CartItem";
 
 const Header = () => {
   const product = useSelector((state) => state.product.product);
@@ -174,7 +173,7 @@ const Header = () => {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "45px", mr: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -189,7 +188,11 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <img width={140} src={product.image} alt="" />
+              {product &&
+                Object.keys(cart).length !== 0 &&
+                Object.keys(cart).map((cartItem) => (
+                  <CartItem item={cart[cartItem]} key={cart[cartItem].id} />
+                ))}
             </Menu>
           </Box>
         </Toolbar>

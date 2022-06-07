@@ -29,13 +29,11 @@ const productSlice = createSlice({
       }
     },
     addToCart: (state, { payload }) => {
-      console.log("payload:::", payload);
       if (Object.keys(state.cart).length === 0) {
         state.cart[payload.id] = payload;
       } else {
         if (state.cart[payload.id]) {
-          state.cart[payload.id].quantity = payload.quantity;
-          state.cart[payload.id].sku = payload.sku;
+          state.cart[payload.id] = { ...state.cart[payload.id], ...payload };
         } else {
           // state.cart[payload.id] = 1;
         }
