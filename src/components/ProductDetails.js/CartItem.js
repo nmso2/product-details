@@ -1,7 +1,17 @@
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, CardMedia, IconButton, Typography } from "@mui/material";
 import React from "react";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import { useDispatch } from "react-redux";
+import { removeFromCart } from "../../redux/slices/productSlice";
 
 const CartItem = ({ item }) => {
+  const dispatch = useDispatch();
+
+  const removeFromCartHandler = (id) => {
+    console.log("id:::::::::", id);
+    dispatch(removeFromCart(id));
+  };
+
   return (
     <Box
       sx={{
@@ -32,6 +42,12 @@ const CartItem = ({ item }) => {
       >
         Rs. {item.discountPrice}
       </Typography>
+      <IconButton
+        aria-label="delete"
+        onClick={() => removeFromCartHandler(item.id)}
+      >
+        <DeleteForeverOutlinedIcon color="error" />
+      </IconButton>
     </Box>
   );
 };

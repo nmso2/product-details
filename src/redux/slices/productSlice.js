@@ -41,8 +41,9 @@ const productSlice = createSlice({
       // state.cart = { ...state.cart, payload };
     },
     removeFromCart: (state, { payload }) => {
+      console.log("=======", payload);
       state.cart = Object.keys(state.cart)
-        .filter((key) => key.includes(payload))
+        .filter((key) => key === payload)
         .reduce((obj, key) => {
           return Object.assign(obj, {
             [key]: state.cart[key],

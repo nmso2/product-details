@@ -193,6 +193,11 @@ const Header = () => {
                 Object.keys(cart).map((cartItem) => (
                   <CartItem item={cart[cartItem]} key={cart[cartItem].id} />
                 ))}
+              {Object.keys(cart).length === 0 && (
+                <Box sx={{ px: 16, py: 5 }}>
+                  <Typography>Your cart is empty!</Typography>
+                </Box>
+              )}
             </Menu>
           </Box>
         </Toolbar>
